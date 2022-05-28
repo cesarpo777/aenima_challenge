@@ -108,12 +108,14 @@ const deleteProduct =  async( req, res ) =>{
 
     try {
         const deletedProduct = await Product.findByIdAndUpdate( id, { state: false }, { new: true , fields:{ name:1, state: 1 }} )
-        if( deletedProduct ){
-            res.status(200).json({
-                msg: 'Product has been removed',
-                deletedProduct
-            })
-        }
+        const products = await Product.find();
+        
+        res.status(200).json({
+            msg: 'Product has been removed',
+            deletedProduct,
+            products
+        })
+        
     } catch (error) {
         console.log( error )
         res.status(500).json({

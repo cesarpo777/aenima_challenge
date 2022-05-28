@@ -3,7 +3,7 @@ const Product = require('../models/Product')
 const getProducts =  async( req, res ) =>{
 
   //const { limit = 10, from = 0 } = req.query;  
-  let query = {}
+  let query = { state: false }
   
   if( req.query.name !== undefined && req.query.name.length > 0){
       query['name'] = req.query.name;
@@ -41,12 +41,12 @@ const getProduct =  async( req, res ) =>{
     const { id } = req.params;
    
     try {
-        const product = await Product.findById( id )
-        if( product ){
-            res.status(200).json({
-                product
-            })
-        }
+        const product = await Product.findOne( { id, state: true} )
+    
+        res.status(200).json({
+            product
+        })
+        
     } catch (error) {
         console.log( error )
         res.status(500).json({

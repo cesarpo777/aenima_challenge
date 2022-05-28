@@ -3,7 +3,7 @@ const Product = require('../models/Product')
 const getProducts =  async( req, res ) =>{
 
   //const { limit = 10, from = 0 } = req.query;  
-  let query = { state: false }
+  let query = { state: true }
   
   if( req.query.name !== undefined && req.query.name.length > 0){
       query['name'] = req.query.name;

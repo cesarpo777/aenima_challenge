@@ -108,7 +108,7 @@ const deleteProduct =  async( req, res ) =>{
 
     try {
         const deletedProduct = await Product.findByIdAndUpdate( id, { state: false }, { new: true , fields:{ name:1, state: 1 }} )
-        const products = await Product.find();
+        const products = await Product.find({state: true});
         
         res.status(200).json({
             msg: 'Product has been removed',

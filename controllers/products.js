@@ -51,7 +51,7 @@ const test = async (req, res) => {
     //const regex = new RegExp( searchTerm, 'i')
 
     let conditions = []// [{$match: [ ] }]
-    let coincidencia = []
+    let coincidencia = [{ state: true }]
 
 
     let from = (parseInt(pag) - 1) * rxp;
@@ -83,7 +83,7 @@ const test = async (req, res) => {
     }
 
     if (coincidencia.length > 0) {
-        conditions.push({ $match: { $and: coincidencia } })
+        conditions.push({ $match:  { $and: coincidencia } })
     }
 
     if (pag !== undefined) {
@@ -94,6 +94,9 @@ const test = async (req, res) => {
     if (rxp !== undefined) {
         conditions.push({ $limit: parseInt(rxp) })
     }
+
+    console.log(conditions)
+    console.log( coincidencia)
     try {
 
         const products = await Product.aggregate(conditions)

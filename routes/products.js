@@ -6,7 +6,9 @@ const { getProduct,
 getProducts,
 createProduct,
 editProduct,
-deleteProduct } = require('../controllers/products')
+deleteProduct,
+test
+} = require('../controllers/products')
 
 
 const router = Router();
@@ -29,6 +31,9 @@ router.post('/',[
     check('description', 'Description field is required').not().isEmpty(),
     validateFields
 ], createProduct )
+
+
+router.post('/test', test )
 
 //Edit product
 

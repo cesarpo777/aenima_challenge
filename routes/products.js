@@ -8,7 +8,8 @@ createProduct,
 editProduct,
 deleteProduct,
 test
-} = require('../controllers/products')
+} = require('../controllers/products');
+const { upload } = require('../middlewares/multer');
 
 
 const router = Router();
@@ -25,12 +26,12 @@ router.get('/:id',[
 ] , getProduct)
 
 // Create a product
-router.post('/',[
+router.post('/', upload.single('image')/* [
     check('name', 'Name field must be between 8 and 50 chars').isLength({ min:8, max: 50}),
     check('price', 'price must be a valid number').isFloat(),
     check('description', 'Description field is required').not().isEmpty(),
     validateFields
-], createProduct )
+], */ ,createProduct )
 
 
 router.post('/test', test )

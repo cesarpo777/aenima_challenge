@@ -1,5 +1,13 @@
-const Product = require('../models/Product')
+const Product = require('../models/Product');
 const ObjectId = require('mongoose').Types.ObjectId
+const cloudinary = require('cloudinary');
+const fs = require('fs-extra');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUDNAME,
+    api_key: process.env.CLOUDINARY_APIKEY,
+    api_secret: process.env.CLOUDINARY_APISECRET
+})
 
 const getProducts = async (req, res) => {
 
@@ -95,8 +103,8 @@ const test = async (req, res) => {
         conditions.push({ $limit: parseInt(rxp) })
     }
 
-    console.log(conditions)
-    console.log( coincidencia)
+    //console.log(conditions)
+    //console.log( coincidencia)
     try {
 
         const products = await Product.aggregate(conditions)
@@ -112,21 +120,38 @@ const test = async (req, res) => {
 
 const createProduct = async (req, res) => {
 
-    try {
-        const product = await Product.create(req.body)
-        const products = await Product.find({ state: true })
-        res.status(201).json({
-            msg: 'Product has been created succesfully',
-            product,
-            products
-        })
+    const { name, price, description, category } = req.body;
+    
+     try {
+         // UPLOAD IMG TO CLUDINARY
+         const result = await cloudinary.v2.uploader.upload(req.file.path)
+         // GRAB THE URL OF THE IMAGE 
+         const { secure_url } = result;
+
+         // SET THE DATA TO CREATE THE PRODUCT
+         let data = {
+             name,
+             price,
+             description,
+             category,
+             img: secure_url
+         }
+
+         // DELETE IMAGE FROM THE SERVER
+         await fs.unlink(req.file.path)
+         // CREATE PRODUCT
+         const product = await Product.create(data)
+         res.json({
+             product
+         })
+
 
     } catch (error) {
         console.log(error)
         res.status(500).json({
             msg: 'Something went wrong call the admin'
         })
-    }
+    } 
 }
 
 const editProduct = async (req, res) => {

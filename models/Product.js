@@ -22,7 +22,7 @@ const ProductSchema = Schema({
 
     img:{
       type: String,
-      default: 'some url'
+      default: "https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     },
 
     state:{
